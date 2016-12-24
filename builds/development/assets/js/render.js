@@ -20482,7 +20482,10 @@ var Index = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Index.__proto__ || Object.getPrototypeOf(Index)).call(this, props));
 
-        _this.state = { date: new Date() };
+        _this.state = {
+            date: new Date(),
+            timerSeconds: 0
+        };
         return _this;
     }
 
@@ -20491,28 +20494,55 @@ var Index = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            this.timer = setInterval(function () {
-                return _this2.tick();
-            }, 1000);
+            window.addEventListener('keyup', function (e) {
+                return _this2.handleKeyUp(e);
+            });
         }
     }, {
         key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            clearInterval(this.timer);
-        }
+        value: function componentWillUnmount() {}
     }, {
         key: 'tick',
         value: function tick() {
-            this.setState({ date: new Date() });
+            // this.setState({date : new Date()});
+            this.setState({ timerSeconds: this.state.timerSeconds + 0.01 });
+        }
+    }, {
+        key: 'handleKeyUp',
+        value: function handleKeyUp(e) {
+            console.log(e);
+            if (e.key === ' ' && !this.timer) this.startTimer();else if (e.key === ' ' && this.timer) this.stopTimer();
+        }
+    }, {
+        key: 'startTimer',
+        value: function startTimer() {
+            var _this3 = this;
+
+            this.setState({ timerSeconds: 0 }, function () {
+                _this3.timer = setInterval(function () {
+                    return _this3.tick();
+                }, 10);
+            });
+        }
+    }, {
+        key: 'stopTimer',
+        value: function stopTimer() {
+            clearInterval(this.timer);
+            this.timer = null;
         }
     }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { onKeyPress: this.startTimer },
                 this.props.text,
-                this.state.date.toLocaleTimeString()
+                this.state.date.toLocaleTimeString(),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    this.state.timerSeconds
+                )
             );
         }
     }]);

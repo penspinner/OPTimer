@@ -5,30 +5,58 @@ class Index extends React.Component
     constructor(props)
     {
         super(props);
-        this.state = {date : new Date()};
+        this.state = 
+        {
+            date : new Date(),
+            timerSeconds: 0
+        };
     }
 
     componentDidMount()
     {
-        this.timer = setInterval(() => this.tick(), 1000);
+        window.addEventListener('keyup', (e) => this.handleKeyUp(e));
     }
 
     componentWillUnmount()
     {
-        clearInterval(this.timer);
     }
 
     tick()
     {
-        this.setState({date : new Date()});
+        // this.setState({date : new Date()});
+        this.setState({timerSeconds: this.state.timerSeconds + 0.01});
+    }
+
+    handleKeyUp(e)
+    {
+        console.log(e);
+        if (e.key === ' ' && !this.timer)
+            this.startTimer();
+        else if (e.key === ' ' && this.timer)
+            this.stopTimer();
+    }
+
+    startTimer()
+    {
+        this.setState({timerSeconds: 0}, () => 
+        {
+            this.timer = setInterval(() => this.tick(), 10);
+        });
+    }
+
+    stopTimer()
+    {
+        clearInterval(this.timer);
+        this.timer = null;
     }
 
     render()
     {
         return (
-            <div>
-            {this.props.text}
-            {this.state.date.toLocaleTimeString()}
+            <div onKeyPress={this.startTimer}>
+                {this.props.text}
+                {this.state.date.toLocaleTimeString()}
+                <div>{this.state.timerSeconds}</div>
             </div>
         );
     }
