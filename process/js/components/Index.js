@@ -33,3 +33,10 @@ class Index extends React.Component
         );
     }
 }
+
+Index.defaultProps = 
+{
+    text: 'Default text props'
+};
+
+export default Index;

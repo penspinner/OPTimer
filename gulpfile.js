@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     gulp_connect = require('gulp-connect'),
-    gulp_babel = require('gulp-babel'),
+    gulp_run = require('gulp-run'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream');
 
@@ -8,7 +8,6 @@ var outputDir = 'builds/development/';
 
 var jsDir = 'process/js/';
 
-// Main js render bundle
 gulp.task('js', function()
 {
     // gulp.src(jsDir + 'index.js')
@@ -17,11 +16,13 @@ gulp.task('js', function()
     //     .pipe(gulp.dest(outputDir + 'assets/js'))
     //     .pipe(gulp_connect.reload());
 
-    browserify(jsDir + 'main.js')
-        .transform('babelify', {presets: ['es2015']})
-        .bundle()
-        .pipe(source('main.js'))
-        .pipe(gulp.dest(outputDir));
+    // Encountering a lot of problems with the require
+    // TypeError: fs.readFileSync...
+    // browserify(jsDir + 'main.js')
+    //     .transform('babelify')
+    //     .bundle()
+    //     .pipe(source('main.js'))
+    //     .pipe(gulp.dest(outputDir));
     
     browserify(jsDir + 'render.js')
         .transform('babelify', {presets: ['es2015', 'react']})
@@ -44,4 +45,9 @@ gulp.task('connect', function()
     });
 });
 
-gulp.task('default', ['js','connect', 'watch']);
+gulp.task('serve', function()
+{
+    gulp_run('electron builds/development/main.js').exec();
+});
+
+gulp.task('default', ['watch', 'js', 'serve']);
