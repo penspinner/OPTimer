@@ -24,7 +24,7 @@ class Index extends React.Component
     tick()
     {
         // this.setState({date : new Date()});
-        this.setState({timerSeconds: this.state.timerSeconds + 0.01});
+        this.setState({timerSeconds: (this.state.timerSeconds + Date.now() - this.state.start) / 1000});
     }
 
     handleKeyUp(e)
@@ -38,7 +38,7 @@ class Index extends React.Component
 
     startTimer()
     {
-        this.setState({timerSeconds: 0}, () => 
+        this.setState({start: Date.now(), timerSeconds: 0}, () => 
         {
             this.timer = setInterval(() => this.tick(), 10);
         });
@@ -53,7 +53,7 @@ class Index extends React.Component
     render()
     {
         return (
-            <div onKeyPress={this.startTimer}>
+            <div onClick={this.startTimer}>
                 {this.props.text}
                 {this.state.date.toLocaleTimeString()}
                 <div>{this.state.timerSeconds}</div>

@@ -20505,7 +20505,7 @@ var Index = function (_React$Component) {
         key: 'tick',
         value: function tick() {
             // this.setState({date : new Date()});
-            this.setState({ timerSeconds: this.state.timerSeconds + 0.01 });
+            this.setState({ timerSeconds: (this.state.timerSeconds + Date.now() - this.state.start) / 1000 });
         }
     }, {
         key: 'handleKeyUp',
@@ -20518,7 +20518,7 @@ var Index = function (_React$Component) {
         value: function startTimer() {
             var _this3 = this;
 
-            this.setState({ timerSeconds: 0 }, function () {
+            this.setState({ start: Date.now(), timerSeconds: 0 }, function () {
                 _this3.timer = setInterval(function () {
                     return _this3.tick();
                 }, 10);
@@ -20535,7 +20535,7 @@ var Index = function (_React$Component) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { onKeyPress: this.startTimer },
+                { onClick: this.startTimer },
                 this.props.text,
                 this.state.date.toLocaleTimeString(),
                 _react2.default.createElement(
